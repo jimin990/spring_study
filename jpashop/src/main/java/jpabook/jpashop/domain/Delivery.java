@@ -12,7 +12,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery",fetch = FetchType.LAZY)
     private Order order;
 
     @Embedded
@@ -25,6 +25,6 @@ public class Delivery {
      * 기본타입이 ordinary인데 이건 숫자로 입력이 되기 때문에 중간에 값이 들어가면, 원래 3인 상태가 밀려나서 망할 수 있다
      */
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus; //READY, COMP
+    private DeliveryStatus status; //READY, COMP
 
 }

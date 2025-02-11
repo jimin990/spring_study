@@ -1,9 +1,6 @@
 package jpabook.jpashop.service;
 
-import jpabook.jpashop.domain.Delivery;
-import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderItem;
+import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repsoitory.ItemRepository;
 import jpabook.jpashop.repsoitory.MemberRepository;
@@ -34,7 +31,7 @@ public class OrderService {
         //배송 생성
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
-
+        delivery.setStatus(DeliveryStatus.READY);
         //주문 상품 생성
         OrderItem orderitem = OrderItem.createOrderitem(item, item.getPrice(), count);
 
@@ -45,14 +42,22 @@ public class OrderService {
         orderRepository.save(order);
 
         return order.getId();
+
     }
 
     //취소
+    @Transactional
     public void cancelOrder(Long orderId) {
         //주문 엔티티를 조회
         Order order = orderRepository.findOne(orderId);
         //취소
         order.cancel();
     }
+
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        List<Order> all = orderRepository.findAllByString(orderSearch);
+        return all;
+    }
+
 
 }

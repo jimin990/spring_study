@@ -27,11 +27,11 @@ public class Order {
     @OneToMany(mappedBy ="order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    private LocalDateTime localDate;//주문시간
+    private LocalDateTime orderDate;//주문시간
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status; // 주문상태 {ORDER, CANCEL}
@@ -63,7 +63,7 @@ public class Order {
         }
 
         order.setStatus(OrderStatus.ORDER);
-        order.setLocalDate(LocalDateTime.now());
+        order.setOrderDate(LocalDateTime.now());
 
         return order;
     }
@@ -73,7 +73,7 @@ public class Order {
      * 주문 취소
      */
     public void cancel() {
-        if(delivery.getDeliveryStatus() == DeliveryStatus.COMP){
+        if(delivery.getStatus() == DeliveryStatus.COMP){
             throw new IllegalStateException("이미 배송이 완료된 상품은 취소가 불가합니다.");
         }
 
